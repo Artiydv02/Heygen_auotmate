@@ -1,0 +1,31 @@
+upload_task:
+  description: |
+    Local video file jo is path par hai: {video_path}, use GCStorageTool ka istemal karke
+    is Google Cloud Storage bucket mein upload karo: {bucket_name}.
+  expected_output: |
+    Ek string jisme upload ki gayi video ka public URL ho.
+    Example: "https://storage.googleapis.com/your-bucket-name/video.mp4"
+
+scripting_task:
+  description: |
+    upload_task se mile public video URL ko analyze karo.
+    Is video mein ho rahe har action ko describe karte hue ek engaging, bolchaal wali Hindi (Romanized) script banao.
+    Jahan bhi video mein ek mahatvapoorna visual change ya naya action ho, wahan ek `[NEXT]` marker lagao.
+    Script ka tone tutorial jaisa hona chahiye.
+  expected_output: |
+    Ek poora text (string) jisme script ho aur syncing ke liye `[NEXT]` markers lage hon.
+  context:
+    - upload_task
+
+video_production_task:
+  description: |
+    scripting_task se mili script ka istemal karo.
+    upload_task se mile public video URL ko background ke roop mein istemal karo.
+    Di gaye Avatar ID ({avatar_id}) aur Voice ID ({voice_id}) ka istemal karo.
+    HeyGenVideoTool ka istemal karke 1080x1920 (Portrait) resolution mein ek final video generate karo.
+    Yaad rakho, tool avatar ko automatically bottom-right corner mein circle frame mein rakhega.
+  expected_output: |
+    Ek safal sandesh jisme HeyGen par host ki gayi final video ka URL ho.
+  context:
+    - scripting_task
+    - upload_task
